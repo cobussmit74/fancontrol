@@ -1,26 +1,23 @@
 from nicegui import ui
 import seeed_dht
-import grovepi
+from grove.gpio import GPIO
 import time
 
-onswitchPin = 5
-offswitchPin = 16
+onswitch = GPIO(5, GPIO.OUT)
+offswitch = GPIO(16, GPIO.OUT)
 
-grovepi.pinMode(onswitchPin,"OUTPUT")
-grovepi.pinMode(offswitchPin,"OUTPUT")
-
-grovepi.digitalWrite(onswitchPin,0)
-grovepi.digitalWrite(offswitchPin,0)
+onswitch.write(0)
+offswitch.write(0)
 
 def switchFanOn():
-    grovepi.digitalWrite(onswitchPin,1)
-    time.sleep(1);
-    grovepi.digitalWrite(onswitchPin,0)
+    onswitch.write(1)
+    time.sleep(1)
+    onswitch.write(0)
 
 def switchFanOff():
-    grovepi.digitalWrite(offswitchPin,1)
-    time.sleep(1);
-    grovepi.digitalWrite(offswitchPin,0)
+    offswitch.write(1)
+    time.sleep(1)
+    offswitch.write(0)
 
 sensor = seeed_dht.DHT("11", 12)
 
