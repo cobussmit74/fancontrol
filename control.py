@@ -12,6 +12,16 @@ grovepi.pinMode(offswitchPin,"OUTPUT")
 grovepi.digitalWrite(onswitchPin,0)
 grovepi.digitalWrite(offswitchPin,0)
 
+ref switchFanOn():
+    grovepi.digitalWrite(onswitchPin,1)
+    time.sleep(1);
+    grovepi.digitalWrite(onswitchPin,0)
+
+ref switchFanOff():
+    grovepi.digitalWrite(offswitchPin,1)
+    time.sleep(1);
+    grovepi.digitalWrite(offswitchPin,0)
+
 sensor = seeed_dht.DHT("11", 12)
 
 ui.label('Bathroom Extractor Fan Monitor')
@@ -26,16 +36,6 @@ def refresh():
     humi, temp = sensor.read()
     tempLabel.set_text(f'Temp: {temp}')
     humidityLabel.set_text(f'Humidity: {humi}')
-
-ref switchFanOn():
-    grovepi.digitalWrite(onswitchPin,1)
-    time.sleep(1);
-    grovepi.digitalWrite(onswitchPin,0)
-
-ref switchFanOff():
-    grovepi.digitalWrite(offswitchPin,1)
-    time.sleep(1);
-    grovepi.digitalWrite(offswitchPin,0)
 
 refresh()
 ui.timer(5.0, lambda: refresh())
