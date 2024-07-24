@@ -12,12 +12,12 @@ grovepi.pinMode(offswitchPin,"OUTPUT")
 grovepi.digitalWrite(onswitchPin,0)
 grovepi.digitalWrite(offswitchPin,0)
 
-ref switchFanOn():
+def switchFanOn():
     grovepi.digitalWrite(onswitchPin,1)
     time.sleep(1);
     grovepi.digitalWrite(onswitchPin,0)
 
-ref switchFanOff():
+def switchFanOff():
     grovepi.digitalWrite(offswitchPin,1)
     time.sleep(1);
     grovepi.digitalWrite(offswitchPin,0)
