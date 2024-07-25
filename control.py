@@ -53,7 +53,7 @@ def readSensors():
 
     humi, temp = sensor.read()
 
-    if humi < currentHumidity or humi > currentHumidity:
+    if humi < (currentHumidity - 1) or humi > (currentHumidity + 1):
         increaseFanRunTime()
 
     currentHumidity = humi
