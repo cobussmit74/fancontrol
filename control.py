@@ -77,12 +77,12 @@ with ui.row():
 
 def refreshCountdownLabel():
     newText = ''
-    if fanIsOn:
+    if fanIsOn and fanOffTime > datetime.now():
        timeDiff = fanOffTime - datetime.now()
        newText = f'for {timeDiff}';
     
     countdownLabel.set_text(newText);
 
-ui.timer(5.0, lambda: refreshCountdownLabel())
+ui.timer(1.0, lambda: refreshCountdownLabel())
 
 ui.run(show=False)
