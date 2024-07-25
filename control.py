@@ -2,6 +2,7 @@ from nicegui import ui
 import seeed_dht
 from grove.gpio import GPIO
 import time
+from apscheduler.schedulers.background import BackgroundScheduler
 
 onswitch = GPIO(5, GPIO.OUT)
 offswitch = GPIO(16, GPIO.OUT)
@@ -20,21 +21,23 @@ def switchFanOff():
     offswitch.write(0)
 
 sensor = seeed_dht.DHT("11", 12)
+currentHumidity, currentTemperature = sensor.read()
+
+def readSensors():
+    humi, temp = sensor.read()
+    currentHumidity = humi
+    currentTemperature = temp
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(readSensors, 'interval', seconds=5)
+scheduler.start()
 
 ui.label('Bathroom Extractor Fan Monitor')
 with ui.row():
-    tempLabel = ui.label('Temp: ?')
-    humidityLabel = ui.label('Humidity: ?')
+    ui.label().bind_text_from(globals(), 'currentTemperature', backward=lambda t: f'Temp: {t}')
+    ui.label().bind_text_from(globals(), 'currentHumidity', backward=lambda h: f'Humidity: {h}')
 with ui.row():
     ui.button('Fan On', on_click=lambda: switchFanOn())
     ui.button('Fan Off', on_click=lambda: switchFanOff())
-
-def refresh():
-    humi, temp = sensor.read()
-    tempLabel.set_text(f'Temp: {temp}')
-    humidityLabel.set_text(f'Humidity: {humi}')
-
-refresh()
-ui.timer(5.0, lambda: refresh())
 
 ui.run(show=False)
