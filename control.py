@@ -25,8 +25,8 @@ currentHumidity, currentTemperature = sensor.read()
 
 def readSensors():
     humi, temp = sensor.read()
-    currentHumidity = humi
-    currentTemperature = temp
+    globals().currentHumidity = humi
+    globals().currentTemperature = temp
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(readSensors, 'interval', seconds=5)
