@@ -10,7 +10,7 @@ offswitch = GPIO(16, GPIO.OUT)
 
 fanRunTime=1
 fanIsOn = False
-fanOffTime = datetime.now() + timedelta(minutes=fanRunTime)
+fanOffTime = datetime.now()
 
 def switchFanOn():
     global fanIsOn
@@ -21,7 +21,6 @@ def switchFanOn():
     onswitch.write(0)
 
     fanIsOn = True
-    fanOffTime = datetime.now() + timedelta(minutes=fanRunTime)
 
 def switchFanOff():
     global fanIsOn
@@ -32,8 +31,9 @@ def switchFanOff():
 
     fanIsOn = False
 
-switchFanOff()
-switchFanOn()
+def increaseFanRunTime():
+    global fanOffTime
+    fanOffTime = datetime.now() + timedelta(minutes=fanRunTime)
 
 sensor = seeed_dht.DHT("11", 12)
 currentHumidity, currentTemperature = sensor.read()
@@ -41,18 +41,17 @@ currentHumidity, currentTemperature = sensor.read()
 def readSensors():
     global currentHumidity
     global currentTemperature
-    global fanOffTime
 
     humi, temp = sensor.read()
 
-    if humi < currentHumidity:
-        fanOffTime = datetime.now() + timedelta(minutes=fanRunTime)
-
-    if humi > currentHumidity:
-        switchFanOn()
+    if humi < currentHumidity or humi > currentHumidity:
+        increaseFanRunTime()
 
     currentHumidity = humi
     currentTemperature = temp
+
+    if not fanIsOn and fanOffTime > datetime.now():
+        switchFanOn()
 
     if fanIsOn and fanOffTime < datetime.now():
         switchFanOff()
@@ -70,5 +69,15 @@ with ui.row():
     ui.button('Fan Off', on_click=lambda: switchFanOff())
 with ui.row():
     ui.label().bind_text_from(globals(), 'fanIsOn', backward=lambda on: 'Fan is ON' if on else 'Fan is OFF')
+    countdownLabel = ui.label('')
+
+def refreshCountdownLabel():
+    newText = ''
+    if fanIsOn:
+       newText = f'until {fanOffTime}';
+    
+    countdownLabel.set_text(newText);
+
+ui.timer(5.0, lambda: refreshCountdownLabel())
 
 ui.run(show=False)
