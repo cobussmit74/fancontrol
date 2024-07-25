@@ -8,16 +8,20 @@ from apscheduler.schedulers.background import BackgroundScheduler
 onswitch = GPIO(5, GPIO.OUT)
 offswitch = GPIO(16, GPIO.OUT)
 
+fanRunTime=1
 fanIsOn = False
+fanOffTime = datetime.now() + timedelta(minutes=fanRunTime)
 
 def switchFanOn():
     global fanIsOn
+    global fanOffTime
 
     onswitch.write(1)
     sleeptime.sleep(1)
     onswitch.write(0)
 
     fanIsOn = True
+    fanOffTime = datetime.now() + timedelta(minutes=fanRunTime)
 
 def switchFanOff():
     global fanIsOn
@@ -30,7 +34,6 @@ def switchFanOff():
 
 switchFanOff()
 switchFanOn()
-fanOffTime = datetime.now() + timedelta(seconds=30)
 
 sensor = seeed_dht.DHT("11", 12)
 currentHumidity, currentTemperature = sensor.read()
@@ -38,8 +41,15 @@ currentHumidity, currentTemperature = sensor.read()
 def readSensors():
     global currentHumidity
     global currentTemperature
+    global fanOffTime
 
     humi, temp = sensor.read()
+
+    if humi < currentHumidity:
+        fanOffTime = datetime.now() + timedelta(minutes=fanRunTime)
+
+    if humi > currentHumidity:
+        switchFanOn()
 
     currentHumidity = humi
     currentTemperature = temp
@@ -48,7 +58,7 @@ def readSensors():
         switchFanOff()
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(readSensors, 'interval', seconds=5)
+scheduler.add_job(readSensors, 'interval', seconds=10)
 scheduler.start()
 
 ui.label('Bathroom Extractor Fan Monitor')
