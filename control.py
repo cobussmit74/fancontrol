@@ -1,7 +1,8 @@
 from nicegui import ui
 import seeed_dht
 from grove.gpio import GPIO
-from datetime import time, datetime, timedelta
+import time as sleeptime
+from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 
 onswitch = GPIO(5, GPIO.OUT)
@@ -13,7 +14,7 @@ def switchFanOn():
     global fanIsOn
 
     onswitch.write(1)
-    time.sleep(1)
+    sleeptime.sleep(1)
     onswitch.write(0)
 
     fanIsOn = True
@@ -22,7 +23,7 @@ def switchFanOff():
     global fanIsOn
 
     offswitch.write(1)
-    time.sleep(1)
+    sleeptime.sleep(1)
     offswitch.write(0)
 
     fanIsOn = False
