@@ -8,7 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 onswitch = GPIO(5, GPIO.OUT)
 offswitch = GPIO(16, GPIO.OUT)
 
-fanRunTime=1
+fanRunTime=20
 fanIsOn = False
 fanOffTime = datetime.now()
 
