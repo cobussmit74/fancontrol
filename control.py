@@ -85,4 +85,4 @@ def refreshCountdownLabel():
 
 ui.timer(1.0, lambda: refreshCountdownLabel())
 
-ui.run(show=False)
+ui.run(show=False, reload=False, title='Fan Control', favicon='🛁')
