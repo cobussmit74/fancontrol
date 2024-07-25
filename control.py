@@ -37,4 +37,4 @@ def refresh():
 refresh()
 ui.timer(5.0, lambda: refresh())
 
-ui.run(show=false)
+ui.run(show=False)
