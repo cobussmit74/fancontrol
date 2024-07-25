@@ -24,9 +24,13 @@ sensor = seeed_dht.DHT("11", 12)
 currentHumidity, currentTemperature = sensor.read()
 
 def readSensors():
+    global currentHumidity
+    global currentTemperature
+
     humi, temp = sensor.read()
-    globals().currentHumidity = humi
-    globals().currentTemperature = temp
+    
+    currentHumidity = humi
+    currentTemperature = temp
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(readSensors, 'interval', seconds=5)
