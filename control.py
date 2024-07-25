@@ -68,5 +68,7 @@ with ui.row():
 with ui.row():
     ui.button('Fan On', on_click=lambda: switchFanOn())
     ui.button('Fan Off', on_click=lambda: switchFanOff())
+with ui.row():
+    ui.label().bind_text_from(globals(), 'fanIsOn', backward=lambda on: 'Fan is ON' if on else 'Fan is OFF')
 
 ui.run(show=False)
