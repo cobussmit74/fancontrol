@@ -39,6 +39,11 @@ def userSwtichFanOn():
     increaseFanRunTime()
     switchFanOn()
 
+def userSwtichFanOff():
+    global fanOffTime
+    fanOffTime = datetime.now()
+    switchFanOff()
+
 sensor = seeed_dht.DHT("11", 12)
 currentHumidity, currentTemperature = sensor.read()
 
@@ -70,7 +75,7 @@ with ui.row():
     ui.label().bind_text_from(globals(), 'currentHumidity', backward=lambda h: f'Humidity: {h}')
 with ui.row():
     ui.button('Fan On', on_click=lambda: userSwtichFanOn())
-    ui.button('Fan Off', on_click=lambda: switchFanOff())
+    ui.button('Fan Off', on_click=lambda: userSwtichFanOff())
 with ui.row():
     ui.label().bind_text_from(globals(), 'fanIsOn', backward=lambda on: 'Fan is ON' if on else 'Fan is OFF')
     countdownLabel = ui.label('')
