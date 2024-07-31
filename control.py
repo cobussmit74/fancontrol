@@ -8,7 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 onswitch = GPIO(5, GPIO.OUT)
 offswitch = GPIO(16, GPIO.OUT)
 
-fanRunTime=20
+fanRunTime=30
 fanIsOn = False
 fanOffTime = datetime.now()
 
@@ -66,7 +66,7 @@ def readSensors():
         switchFanOff()
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(readSensors, 'interval', seconds=10)
+scheduler.add_job(readSensors, 'interval', seconds=30)
 scheduler.start()
 
 ui.label('Bathroom Extractor Fan Monitor')
