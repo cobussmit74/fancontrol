@@ -5,6 +5,8 @@ import time as sleeptime
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 
+version = '0.1'
+
 onswitch = GPIO(5, GPIO.OUT)
 offswitch = GPIO(16, GPIO.OUT)
 
@@ -79,6 +81,8 @@ with ui.row():
 with ui.row():
     ui.label().bind_text_from(globals(), 'fanIsOn', backward=lambda on: 'Fan is ON' if on else 'Fan is OFF')
     countdownLabel = ui.label('')
+with ui.row().style('justify-content: flex-end;'):
+    ui.label(f'Version: {version}')
 
 def refreshCountdownLabel():
     newText = ''
