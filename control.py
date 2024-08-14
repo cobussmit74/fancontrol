@@ -5,7 +5,7 @@ import time as sleeptime
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 
-version = '0.1'
+version = '0.2'
 
 onswitch = GPIO(5, GPIO.OUT)
 offswitch = GPIO(16, GPIO.OUT)
@@ -54,8 +54,10 @@ def readSensors():
     global currentTemperature
 
     humi, temp = sensor.read()
-
-    if humi < (currentHumidity - 1) or humi > (currentHumidity + 1):
+    humiChange = abs(currentHumidity - humi)
+    requiredHumiChange = 1 if fanIsOn else 2
+    
+    if humiChange >= requiredHumiChange:
         increaseFanRunTime()
 
     currentHumidity = humi
