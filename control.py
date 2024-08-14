@@ -46,6 +46,7 @@ def userSwtichFanOff():
     fanOffTime = datetime.now()
     switchFanOff()
 
+userSwtichFanOff()
 sensor = seeed_dht.DHT("11", 12)
 currentHumidity, currentTemperature = sensor.read()
 
