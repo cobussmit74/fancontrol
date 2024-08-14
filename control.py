@@ -93,6 +93,10 @@ def refreshCountdownLabel():
        timeDiff = fanOffTime - datetime.now()
        newText = f'for {timeDiff}';
     
+    if not fanIsOn and fanOffTime < datetime.now():
+       timeDiff = datetime.now() - fanOffTime
+       newText = f'for {timeDiff}';
+    
     countdownLabel.set_text(newText);
 
 ui.timer(1.0, lambda: refreshCountdownLabel())
