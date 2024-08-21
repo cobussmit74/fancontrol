@@ -10,7 +10,7 @@ version = '0.2'
 onswitch = GPIO(5, GPIO.OUT)
 offswitch = GPIO(16, GPIO.OUT)
 
-fanRunTime=10
+fanRunTime=20
 fanIsOn = False
 fanOffTime = datetime.now()
 
